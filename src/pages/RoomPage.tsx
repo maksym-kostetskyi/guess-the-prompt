@@ -100,7 +100,7 @@ export default function RoomPage() {
   useEffect(() => {
     if (!roomId) return;
 
-    const ws = new WebSocket(`https://echo.websocket.org/`);
+    const ws = new WebSocket(`ws://51.21.195.135:8000/ws/rooms/testroom`);
 
     ws.onopen = () => {
       console.log("✅ WebSocket connected");
