@@ -68,13 +68,13 @@ export default function RoomPage() {
     const joinRoom = async () => {
       setLoading(true);
       try {
-        await fetch(`http://51.21.195.135:8000/rooms/${roomId}/join`, {
+        await fetch(`https://guessthepromt.store/rooms/${roomId}/join`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ player_name: player.name }),
         });
 
-        const res = await fetch(`http://51.21.195.135:8000/rooms/${roomId}`);
+        const res = await fetch(`https://guessthepromt.store/rooms/${roomId}`);
         if (!res.ok) throw new Error("Room not found");
 
         const data = await res.json();
@@ -100,7 +100,7 @@ export default function RoomPage() {
   useEffect(() => {
     if (!roomId) return;
 
-    const ws = new WebSocket(`ws://51.21.195.135:8000/ws/rooms/testroom`);
+    const ws = new WebSocket(`ws://guessthepromt.store/ws/rooms/testroom`);
 
     ws.onopen = () => {
       console.log("✅ WebSocket connected");
