@@ -1,4 +1,4 @@
-import RuleSlider from "@/components/RuleSlider";
+import RuleSlider from "@/pages/LoginPage/components/RuleSlider";
 import {
   Box,
   Flex,

@@ -1,9 +1,9 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import JoinPage from "./pages/JoinPage";
+import JoinPage from "./pages/LoginPage/loginPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import CreateRoomPage from "./pages/CreateRoomPage";
-import RoomPage from "./pages/RoomPage";
+import RoomPage from "./pages/RoomPage/RoomPage";
 
 function App() {
   return (
