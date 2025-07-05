@@ -1,12 +1,14 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Flex, HStack, Spinner, Text, VStack } from "@chakra-ui/react";
+import { Flex, HStack, Spinner, Text, VStack, Button } from "@chakra-ui/react";
 import { PlayerList } from "./components/PlayerList";
 import { RoomImage } from "./components/RoomImage";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { PromptInput } from "./components/PromptInput";
+import { GuessInput } from "./components/GuessInput";
 import { Header } from "@/components/Header";
 import useRoom from "../../hooks/useRoom";
+import { leaveRoom } from "@/api/leaveRoom";
 
 const RoomPage = () => {
   const navigate = useNavigate();
@@ -47,33 +49,59 @@ const RoomPage = () => {
 
   const current = room.players.find((p) => p.name === player.name);
   const isAdmin = current?.role === "admin";
+  const isGuesser = current && current.role !== "prompter"; // або інша логіка визначення
+  //const isPrompter = current && current.role === "prompter"; // або інша логіка визначення
+
+  const handleLeaveRoom = async () => {
+    await leaveRoom(roomId!, player.name);
+    navigate("/room");
+  };
 
   return (
     <>
       <Header />
-
       <Flex
         direction="column"
         justify="space-between"
         align="center"
         h="80vh"
         w="90vw"
-        bg="gray.50"
+        bg="white"
         p={10}
-        color={"gray.800"}
+        color="gray.800"
       >
         <HStack justify="space-between" h="80%" w="100%">
           <PlayerList players={room.players} />
           <RoomImage imageUrl={imageUrl} />
           {isAdmin && <SettingsPanel />}
         </HStack>
-
         <VStack h="min-content" w="30%" justify="center">
-          <PromptInput
-            playerName={player.name}
-            roomId={roomId!}
-            onNewImage={setImageUrl}
-          />
+          <Button
+            w="full"
+            colorScheme="purple"
+            variant="solid"
+            mb={4}
+            color="white"
+            _hover={{ bg: "purple.600" }}
+            onClick={handleLeaveRoom}
+          >
+            Leave Room
+          </Button>
+          {isGuesser ? (
+            <GuessInput
+              playerName={player.name}
+              roomId={roomId!}
+              onGuess={() => {}}
+              buttonColorScheme="green"
+            />
+          ) : (
+            <PromptInput
+              playerName={player.name}
+              roomId={roomId!}
+              onNewImage={setImageUrl}
+              buttonColorScheme="purple"
+            />
+          )}
         </VStack>
       </Flex>
     </>

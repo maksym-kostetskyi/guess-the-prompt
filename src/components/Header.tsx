@@ -14,18 +14,29 @@ import { useState, useEffect } from "react";
 export function Header() {
   const navigate = useNavigate();
   const [name, setName] = useState<string | null>(null);
+  const [isAccount, setIsAccount] = useState(false);
 
   // Read nickname from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem("player");
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        setName(parsed.name ?? null);
-      } catch {
+    const check = () => {
+      const stored = localStorage.getItem("player");
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          setName(parsed.name ?? null);
+          setIsAccount(!!parsed.token || !!parsed.isAccount || !!parsed.password);
+        } catch {
+          setName(null);
+          setIsAccount(false);
+        }
+      } else {
         setName(null);
+        setIsAccount(false);
       }
-    }
+    };
+    check();
+    const interval = setInterval(check, 500);
+    return () => clearInterval(interval);
   }, []);
 
   const handleSetName = () => {
@@ -35,7 +46,14 @@ export function Header() {
   };
 
   const handleLogin = () => {
-    navigate("/login");
+    navigate("/");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("player");
+    setName(null);
+    setIsAccount(false);
+    navigate("/");
   };
 
   return (
@@ -57,18 +75,24 @@ export function Header() {
         {name ? (
           <>
             <Text>Hi, {name}</Text>
-            <Button colorScheme="purple" size="sm" variant="outline" onClick={handleSetName} >
+            <Button colorScheme="purple" size="sm" variant="outline" onClick={handleSetName}>
               Change Name
             </Button>
+            {isAccount ? (
+              <Button size="sm" colorScheme="purple" variant="outline" onClick={handleLogout}>
+                Log Out
+              </Button>
+            ) : (
+              <Button size="sm" colorScheme="purple" variant="outline" onClick={handleLogin}>
+                Log In
+              </Button>
+            )}
           </>
         ) : (
           <Button colorScheme="purple" size="sm" variant="outline" onClick={handleSetName}>
             Set Name
           </Button>
         )}
-        <Button size="sm" colorScheme="purple" variant="outline" onClick={handleLogin}>
-          Log In
-        </Button>
       </HStack>
     </Flex>
   );

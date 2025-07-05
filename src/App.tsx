@@ -2,7 +2,7 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import JoinPage from "./pages/LoginPage/loginPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import CreateRoomPage from "./pages/CreateRoomPage";
+import CreateOrJoinRoomPage from "./pages/CreateOrJoinRoomPage";
 import RoomPage from "./pages/RoomPage/RoomPage";
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<JoinPage />} />
-        <Route path="/room" element={<CreateRoomPage />} />
+        <Route path="/room" element={<CreateOrJoinRoomPage />} />
         <Route path="/room/:roomId" element={<RoomPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

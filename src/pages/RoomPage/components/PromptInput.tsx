@@ -6,10 +6,12 @@ export function PromptInput({
   playerName,
   roomId,
   onNewImage,
+  buttonColorScheme = "purple",
 }: {
   playerName: string;
   roomId: string;
   onNewImage: (url: string) => void;
+  buttonColorScheme?: "green" | "purple";
 }) {
   const [prompt, setPrompt] = useState("");
 
@@ -28,9 +30,8 @@ export function PromptInput({
       />
       <Button
         w="full"
-        bg="purple.500"
+        colorScheme={buttonColorScheme}
         color="white"
-        _hover={{ bg: "purple.400" }}
         onClick={handleGenerate}
       >
         Generate image

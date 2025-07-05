@@ -1,7 +1,7 @@
 // src/pages/CreateRoomPage.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Input, Button, VStack, Text, Spinner, Flex } from "@chakra-ui/react";
+import { Box, Input, Button, VStack, Text, Spinner } from "@chakra-ui/react";
 import { Header } from "@/components/Header";
 import { createRoom } from "@/api/createRoom";
 // import useRoom from "../hooks/useRoom";
@@ -45,18 +45,8 @@ export default function CreateOrJoinRoomPage() {
   return (
     <>
       <Header />
-      <Flex
-        direction="column"
-        justify="center"
-        align="center"
-        h="80vh"
-        w="90vw"
-        bg="gray.50"
-        p={10}
-        color={"gray.800"}
-      >
-        <Box w="30%" minW="320px">
-          <VStack>
+      <Box maxW="400px" mx="auto" mt={12}>
+        <VStack>
         {/* Join by existing ID */}
         <VStack w="100%">
           <Input
@@ -87,9 +77,8 @@ export default function CreateOrJoinRoomPage() {
         >
           Create New Room
         </Button>
-          </VStack>
-        </Box>
-      </Flex>
+        </VStack>
+      </Box>
     </>
   );
 }
