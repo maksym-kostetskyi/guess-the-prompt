@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Flex, HStack, Spinner, Text, VStack } from "@chakra-ui/react";
 import { PlayerList } from "./components/PlayerList";
@@ -8,20 +8,24 @@ import { PromptInput } from "./components/PromptInput";
 import { Header } from "@/components/Header";
 import useRoom from "../../hooks/useRoom";
 
-export default function RoomPage() {
+const RoomPage = () => {
+  const navigate = useNavigate();
   const { roomId } = useParams<{ roomId: string }>();
   const stored = localStorage.getItem("player");
   const player = stored ? JSON.parse(stored) : { name: "" };
 
-  const { room, loading } = useRoom(roomId!, player.name, { mode: "join" });
+  // Якщо немає імені — редірект
+  useEffect(() => {
+    if (!player.name) {
+      navigate("/");
+    }
+  }, [player.name, navigate]);
+
+  const { room, loading } = useRoom(roomId!, player.name);
   const [imageUrl, setImageUrl] = useState<string>("");
 
   // Підтягуємо image_url із room у локальний state
   const roomImageUrl = room?.image_url;
-
-  useEffect(() => {
-    console.log(room, loading);
-  }, [loading, room]);
 
   useEffect(() => {
     if (roomImageUrl) {
@@ -56,6 +60,7 @@ export default function RoomPage() {
         w="90vw"
         bg="gray.50"
         p={10}
+        color={"gray.800"}
       >
         <HStack justify="space-between" h="80%" w="100%">
           <PlayerList players={room.players} />
@@ -73,4 +78,6 @@ export default function RoomPage() {
       </Flex>
     </>
   );
-}
+};
+
+export default RoomPage;

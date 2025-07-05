@@ -1,33 +1,33 @@
 // src/pages/CreateRoomPage.tsx
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Input, Button, VStack, Text, Spinner } from "@chakra-ui/react";
 import { createRoom } from "@/api/createRoom";
-import useRoom from "../hooks/useRoom";
+// import useRoom from "../hooks/useRoom";
 
 export default function CreateRoomPage() {
   const navigate = useNavigate();
 
   // читаємо ім’я гравця
-  const stored = localStorage.getItem("player");
-  const player = stored ? JSON.parse(stored) : { name: "" };
+  // const stored = localStorage.getItem("player");
+  // const player = stored ? JSON.parse(stored) : { name: "" };
 
   // стан для нового roomId
-  const [newRoomId, setNewRoomId] = useState<string | null>(null);
+  const [creating, setCreating] = useState(false);
 
-  // після того, як newRoomId встановлено, підключаємося через хук у режимі "create"
-  const { room, loading: roomLoading } = useRoom(
-    newRoomId ?? "",
-    player.name,
-    { mode: "create" } // режим створення → hook викличе createRoom, join, fetch, WS
-  );
-
-  // як тільки hook зарендерить room, переходимо на /room/:id
-  useEffect(() => {
-    if (newRoomId && room) {
-      navigate(`/room/${newRoomId}`);
+  // обробник кліку "Create room"
+  const handleCreate = async () => {
+    try {
+      setCreating(true);
+      const id = await createRoom();
+      localStorage.setItem("room", JSON.stringify({ roomId: id }));
+      navigate(`/room/${id}`);
+    } catch (err) {
+      console.error("Error creating room", err);
+    } finally {
+      setCreating(false);
     }
-  }, [newRoomId, room, navigate]);
+  };
 
   // обробник кліку "Join by ID"
   const [joinId, setJoinId] = useState("");
@@ -35,19 +35,10 @@ export default function CreateRoomPage() {
     if (joinId.trim()) navigate(`/room/${joinId.trim()}`);
   };
 
-  // обробник кліку "Create room"
-  const handleCreate = async () => {
-    try {
-      const id = await createRoom();
-      setNewRoomId(id);
-      localStorage.setItem("room", JSON.stringify({ roomId: id }));
-    } catch (err) {
-      console.error("Error creating room", err);
-    }
-  };
 
-  // показуємо спінер, якщо hook у стані loading
-  if (roomLoading) return <Spinner size="xl" mt={20} />;
+
+  // показуємо спінер, якщо створюється кімната
+  if (creating) return <Spinner size="xl" mt={20} />;
 
   return (
     <Box maxW="400px" mx="auto" mt={12}>
