@@ -102,31 +102,23 @@ export default function JoinPage() {
         <Flex w="100%" mb={4}>
           <Button
             flex={1}
-            colorScheme="green"
-            variant={authTab === "anon" ? "solid" : "outline"}
-            borderRightRadius={0}
+            bgColor="green.600"
             borderLeftRadius="md"
-            borderRightWidth={1}
             borderColor="gray.200"
+            _hover={{ bgColor: "green.500" }}
             color="white"
-            _active={{ bg: "green.600" }}
-            _hover={{ bg: authTab === "anon" ? "green.600" : undefined }}
             onClick={() => setAuthTab("anon")}
           >
-            АНОНІМНО
+            ANONYM
           </Button>
           <Button
             flex={1}
-            colorScheme="purple"
-            variant={authTab === "login" ? "solid" : "outline"}
-            borderLeftRadius={0}
-            borderRightRadius="md"
             color="white"
-            _active={{ bg: "purple.600" }}
-            _hover={{ bg: authTab === "login" ? "purple.600" : undefined }}
+             bgColor="yellow.600"
+            _hover={{ bgColor: "yellow.500" }}
             onClick={() => setAuthTab("login")}
           >
-            Залогінитись
+            LOGIN
           </Button>
         </Flex>
         {/* Content under tabs */}
@@ -139,48 +131,57 @@ export default function JoinPage() {
               </Avatar.Root>
             </AvatarGroup>
             <Input
-              placeholder="Ваше ім’я"
+              placeholder="Nickname"
+              color="gray.800"
+              type="string"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
             <Button
               w="full"
-              bg="purple.500"
               color="white"
+              bg="purple.500"
               _hover={{ bg: "purple.400" }}
               onClick={() => handleSaveName()}
             >
-              Розпочати
+              START
             </Button>
           </VStack>
         )}
   {authTab === "login" && (
     <VStack w="100%" gap={4}>
             <Input
-              placeholder="Логін"
+              placeholder="Nickname"
+              color="gray.800"
+              type="string"
               value={authUsername}
               onChange={(e) => setAuthUsername(e.target.value)}
             />
             <Input
-              placeholder="Пароль"
+              placeholder="Password"
+              color="gray.800"
               type="password"
               value={authPassword}
               onChange={(e) => setAuthPassword(e.target.value)}
             />
       <Button
         w="full"
-        colorScheme="purple"
+        color="white"
+        bg="purple.500"
+        _hover={{ bg: "purple.400" }}
         loading={authLoading}
         onClick={handleLogin}
       >
-        Увійти
+       LOGIN
       </Button>
       <Button
         variant="ghost"
-        colorScheme="purple"
+        color="white"
+        bg="blue.500"
+        _hover={{ bg: "blue.400" }}
         onClick={() => setAuthTab("register")}
       >
-        Створити акаунт
+        Create account
       </Button>
       {authError && <Text color="red.500">{authError}</Text>}
           </VStack>
@@ -188,32 +189,37 @@ export default function JoinPage() {
   {authTab === "register" && (
     <VStack w="100%" gap={4}>
             <Input
-              placeholder="Логін"
+              placeholder="Nickname"
+              color="gray.800"
+              type="string"
               value={authUsername}
               onChange={(e) => setAuthUsername(e.target.value)}
             />
             <Input
-              placeholder="Пароль"
+              placeholder="Password"
+              color="gray.800"
               type="password"
               value={authPassword}
               onChange={(e) => setAuthPassword(e.target.value)}
             />
       <Button
         w="full"
-        colorScheme="purple"
-        variant="solid"
+        color="white"
+        bg="blue.500"
+        _hover={{ bg: "blue.400" }}
         borderRadius="md"
         loading={authLoading}
         onClick={handleRegister}
       >
-        Створити акаунт
+        CREATE ACCOUNT
       </Button>
       <Button
-        variant="ghost"
-        colorScheme="purple"
+        color="white"
+        bg="purple.500"
+        _hover={{ bg: "purple.400" }}
         onClick={() => setAuthTab("login")}
       >
-        Увійти
+        Login
       </Button>
       {authError && <Text color="red.500">{authError}</Text>}
           </VStack>

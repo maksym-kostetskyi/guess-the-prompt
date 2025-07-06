@@ -2,10 +2,10 @@ import { Text, HStack, Button, Flex } from "@chakra-ui/react";
 import { useState } from "react";
 
 const slides = [
-  "Краще бути на зв'язку: говоріть через Discord або Zoom",
-  "Кожен гравець вводить підказку, інші вгадують її",
-  "Автор отримує бал, якщо вгадає хоч хтось, але не всі",
-  "Хост може обрати кількість слів для підказки",
+  "Better stay in touch: talk via Discord or Zoom",
+  "Each player enters a prompt, others try to guess it",
+  "The author gets a point if someone guesses it, but not everyone",
+  "The host can choose the number of words for the prompt",
 ];
 
 export default function RuleSlider() {

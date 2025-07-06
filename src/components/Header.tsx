@@ -57,10 +57,10 @@ export function Header() {
   };
 
   return (
-    <Flex as="header" align="center" px={4} py={2} bg="white" boxShadow="sm" color={"white"}>
+    <Flex gap={4} as="header" align="center" borderRadius={8} px={4} py={2} color={"white"} border={"1px solid #e2e8f0"} bg="white" boxShadow="sm">
       {/* Left: Logo */}
       <Box cursor="pointer" onClick={() => navigate("/")}>
-        <Image src="/logo192.png" alt="Logo" boxSize="40px" />
+        <Image src="/guess-the-prompt.png" alt="Logo" boxSize="40px" />
       </Box>
 
       {/* Center: Title */}
@@ -74,16 +74,27 @@ export function Header() {
       <HStack>
         {name ? (
           <>
-            <Text>Hi, {name}</Text>
-            <Button colorScheme="purple" size="sm" variant="outline" onClick={handleSetName}>
-              Change Name
+            <Text color="gray.800">Hi, {name}</Text>
+            <Button color="white"
+              bg="purple.500"
+              _hover={{ bg: "purple.400" }} 
+              onClick={handleSetName}>
+                Change Name
             </Button>
             {isAccount ? (
-              <Button size="sm" colorScheme="purple" variant="outline" onClick={handleLogout}>
+              <Button 
+              color="white"
+              bg="green.500"
+              _hover={{ bg: "green.400" }} 
+              onClick={handleLogout}>
                 Log Out
               </Button>
             ) : (
-              <Button size="sm" colorScheme="purple" variant="outline" onClick={handleLogin}>
+              <Button 
+              color="white"
+              bg="green.500"
+              _hover={{ bg: "green.400" }} 
+              onClick={handleLogin}>
                 Log In
               </Button>
             )}

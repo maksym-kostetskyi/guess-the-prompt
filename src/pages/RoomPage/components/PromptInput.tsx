@@ -6,7 +6,6 @@ export function PromptInput({
   playerName,
   roomId,
   onNewImage,
-  buttonColorScheme = "purple",
 }: {
   playerName: string;
   roomId: string;
@@ -30,8 +29,9 @@ export function PromptInput({
       />
       <Button
         w="full"
-        colorScheme={buttonColorScheme}
         color="white"
+        bg="green.500"
+        _hover={{ bg: "green.400" }}
         onClick={handleGenerate}
       >
         Generate image

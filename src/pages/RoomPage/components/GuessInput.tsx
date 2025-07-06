@@ -2,7 +2,7 @@ import { Input, Button, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { makeGuess } from "@/api/makeGuess";
 
-export function GuessInput({ playerName, roomId, onGuess, buttonColorScheme = "green" }: {
+export function GuessInput({ playerName, roomId, onGuess}: {
   playerName: string;
   roomId: string;
   onGuess?: () => void;
@@ -33,8 +33,9 @@ export function GuessInput({ playerName, roomId, onGuess, buttonColorScheme = "g
       />
       <Button
         w="full"
-        colorScheme={buttonColorScheme}
         color="white"
+        bg="green.500"
+        _hover={{ bg: "green.400" }}
         onClick={handleGuess}
         loading={loading}
       >

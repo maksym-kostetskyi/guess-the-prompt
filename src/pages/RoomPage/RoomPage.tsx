@@ -49,8 +49,7 @@ const RoomPage = () => {
 
   const current = room.players.find((p) => p.name === player.name);
   const isAdmin = current?.role === "admin";
-  const isGuesser = current && current.role !== "prompter"; // або інша логіка визначення
-  //const isPrompter = current && current.role === "prompter"; // або інша логіка визначення
+  const isPrompter = true; //current && current.role === "prompter"; // або інша логіка визначення
 
   const handleLeaveRoom = async () => {
     await leaveRoom(roomId!, player.name);
@@ -66,28 +65,28 @@ const RoomPage = () => {
         align="center"
         h="80vh"
         w="90vw"
-        bg="white"
         p={10}
         color="gray.800"
+        gap={4}
       >
         <HStack justify="space-between" h="80%" w="100%">
           <PlayerList players={room.players} />
           <RoomImage imageUrl={imageUrl} />
           {isAdmin && <SettingsPanel />}
         </HStack>
+
         <VStack h="min-content" w="30%" justify="center">
           <Button
             w="full"
-            colorScheme="purple"
-            variant="solid"
             mb={4}
             color="white"
-            _hover={{ bg: "purple.600" }}
+              bg="purple.500"
+              _hover={{ bg: "purple.400" }}
             onClick={handleLeaveRoom}
           >
             Leave Room
           </Button>
-          {isGuesser ? (
+          {!isPrompter ? (
             <GuessInput
               playerName={player.name}
               roomId={roomId!}
