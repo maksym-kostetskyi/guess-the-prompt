@@ -49,7 +49,7 @@ const RoomPage = () => {
 
   const current = room.players.find((p) => p.name === player.name);
   const isAdmin = current?.role === "admin";
-  const isPrompter = true; //current && current.role === "prompter"; // або інша логіка визначення
+  const isPrompter = room.currentPrompter === player.name;
 
   const handleLeaveRoom = async () => {
     await leaveRoom(roomId!, player.name);
@@ -80,8 +80,8 @@ const RoomPage = () => {
             w="full"
             mb={4}
             color="white"
-              bg="purple.500"
-              _hover={{ bg: "purple.400" }}
+            bg="purple.500"
+            _hover={{ bg: "purple.400" }}
             onClick={handleLeaveRoom}
           >
             Leave Room

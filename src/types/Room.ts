@@ -7,4 +7,5 @@ export default interface Room {
   current_turn: number;
   prompt: string;
   image_url: string;
+  currentPrompter: string;
 }
