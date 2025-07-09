@@ -9,6 +9,7 @@ import { GuessInput } from "./components/GuessInput";
 import { Header } from "@/components/Header";
 import useRoom from "../../hooks/useRoom";
 import { leaveRoom } from "@/api/leaveRoom";
+import nextTurn from "@/api/nextTurn";
 
 const RoomPage = () => {
   const navigate = useNavigate();
@@ -47,8 +48,7 @@ const RoomPage = () => {
     );
   }
 
-  const currentPlayer = room.players.find((p) => p.username === player.name);
-  const isAdmin = room.current_admin === currentPlayer?.username;
+  const isAdmin = room.current_admin === player.name;
   const isPrompter = room.current_prompter === player.name;
 
   const handleLeaveRoom = async () => {
@@ -56,9 +56,15 @@ const RoomPage = () => {
     navigate("/room");
   };
 
+  const handleNextTurn = async () => {
+    await nextTurn(roomId!);
+    setImageUrl(""); // Очищуємо URL, щоб оновити зображення
+  };
+
   return (
     <>
       <Header />
+
       <Flex
         direction="column"
         justify="space-between"
@@ -100,6 +106,18 @@ const RoomPage = () => {
               onNewImage={setImageUrl}
               buttonColorScheme="purple"
             />
+          )}
+
+          {isAdmin && (
+            <Button
+              w="full"
+              color="white"
+              bg="blue.500"
+              _hover={{ bg: "blue.400" }}
+              onClick={handleNextTurn}
+            >
+              Next Turn
+            </Button>
           )}
         </VStack>
       </Flex>
