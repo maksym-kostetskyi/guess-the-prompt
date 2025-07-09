@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { registerAccount } from "@/api/registerAccount";
 import { loginAccount } from "@/api/loginAccount";
 
-export default function JoinPage() {
+export default function LoginPage() {
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [name, setName] = useState("");
   const [authTab, setAuthTab] = useState<"anon" | "login" | "register">("anon");
@@ -29,6 +29,7 @@ export default function JoinPage() {
     if (!name.trim()) return;
 
     localStorage.setItem("player", JSON.stringify({ name }));
+    localStorage.setItem("token", "");
     console.log("Ім’я збережено:", name);
     navigate("/room");
   };
@@ -37,17 +38,23 @@ export default function JoinPage() {
     setAuthLoading(true);
     setAuthError("");
     try {
-      const res = await loginAccount(authUsername, authPassword);
-      if (!res.ok) throw new Error("Помилка входу");
-      // тут можна зберегти токен, якщо сервер повертає
+      // loginAccount повертає { access_token, token_type }
+      const { access_token } = await loginAccount(authUsername, authPassword);
+
+      // зберігаємо ім’я гравця
       localStorage.setItem("player", JSON.stringify({ name: authUsername }));
+      // і токен
+      localStorage.setItem("token", access_token);
+
       navigate("/room");
-    } catch {
+    } catch (err) {
+      console.error(err);
       setAuthError("Невірний логін або пароль");
     } finally {
       setAuthLoading(false);
     }
   };
+
   const handleRegister = async () => {
     setAuthLoading(true);
     setAuthError("");
@@ -114,7 +121,7 @@ export default function JoinPage() {
           <Button
             flex={1}
             color="white"
-             bgColor="yellow.600"
+            bgColor="yellow.600"
             _hover={{ bgColor: "yellow.500" }}
             onClick={() => setAuthTab("login")}
           >
@@ -122,8 +129,8 @@ export default function JoinPage() {
           </Button>
         </Flex>
         {/* Content under tabs */}
-  {authTab === "anon" && (
-    <VStack w="100%" gap={4}>
+        {authTab === "anon" && (
+          <VStack w="100%" gap={4}>
             <AvatarGroup size="xl">
               <Avatar.Root>
                 <Avatar.Fallback />
@@ -148,8 +155,8 @@ export default function JoinPage() {
             </Button>
           </VStack>
         )}
-  {authTab === "login" && (
-    <VStack w="100%" gap={4}>
+        {authTab === "login" && (
+          <VStack w="100%" gap={4}>
             <Input
               placeholder="Nickname"
               color="gray.800"
@@ -164,30 +171,30 @@ export default function JoinPage() {
               value={authPassword}
               onChange={(e) => setAuthPassword(e.target.value)}
             />
-      <Button
-        w="full"
-        color="white"
-        bg="purple.500"
-        _hover={{ bg: "purple.400" }}
-        loading={authLoading}
-        onClick={handleLogin}
-      >
-       LOGIN
-      </Button>
-      <Button
-        variant="ghost"
-        color="white"
-        bg="blue.500"
-        _hover={{ bg: "blue.400" }}
-        onClick={() => setAuthTab("register")}
-      >
-        Create account
-      </Button>
-      {authError && <Text color="red.500">{authError}</Text>}
+            <Button
+              w="full"
+              color="white"
+              bg="purple.500"
+              _hover={{ bg: "purple.400" }}
+              loading={authLoading}
+              onClick={handleLogin}
+            >
+              LOGIN
+            </Button>
+            <Button
+              variant="ghost"
+              color="white"
+              bg="blue.500"
+              _hover={{ bg: "blue.400" }}
+              onClick={() => setAuthTab("register")}
+            >
+              Create account
+            </Button>
+            {authError && <Text color="red.500">{authError}</Text>}
           </VStack>
         )}
-  {authTab === "register" && (
-    <VStack w="100%" gap={4}>
+        {authTab === "register" && (
+          <VStack w="100%" gap={4}>
             <Input
               placeholder="Nickname"
               color="gray.800"
@@ -202,26 +209,26 @@ export default function JoinPage() {
               value={authPassword}
               onChange={(e) => setAuthPassword(e.target.value)}
             />
-      <Button
-        w="full"
-        color="white"
-        bg="blue.500"
-        _hover={{ bg: "blue.400" }}
-        borderRadius="md"
-        loading={authLoading}
-        onClick={handleRegister}
-      >
-        CREATE ACCOUNT
-      </Button>
-      <Button
-        color="white"
-        bg="purple.500"
-        _hover={{ bg: "purple.400" }}
-        onClick={() => setAuthTab("login")}
-      >
-        Login
-      </Button>
-      {authError && <Text color="red.500">{authError}</Text>}
+            <Button
+              w="full"
+              color="white"
+              bg="blue.500"
+              _hover={{ bg: "blue.400" }}
+              borderRadius="md"
+              loading={authLoading}
+              onClick={handleRegister}
+            >
+              CREATE ACCOUNT
+            </Button>
+            <Button
+              color="white"
+              bg="purple.500"
+              _hover={{ bg: "purple.400" }}
+              onClick={() => setAuthTab("login")}
+            >
+              Login
+            </Button>
+            {authError && <Text color="red.500">{authError}</Text>}
           </VStack>
         )}
       </Box>

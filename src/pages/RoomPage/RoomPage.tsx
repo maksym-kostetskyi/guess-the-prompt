@@ -47,9 +47,9 @@ const RoomPage = () => {
     );
   }
 
-  const current = room.players.find((p) => p.name === player.name);
-  const isAdmin = current?.role === "admin";
-  const isPrompter = room.currentPrompter === player.name;
+  const currentPlayer = room.players.find((p) => p.username === player.name);
+  const isAdmin = room.current_admin === currentPlayer?.username;
+  const isPrompter = room.current_prompter === player.name;
 
   const handleLeaveRoom = async () => {
     await leaveRoom(roomId!, player.name);
