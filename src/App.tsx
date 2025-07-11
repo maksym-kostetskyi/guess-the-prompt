@@ -1,10 +1,10 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/LoginPage/LoginPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import CreateOrJoinRoomPage from "./pages/CreateOrJoinRoomPage";
 import RoomPage from "./pages/RoomPage/RoomPage";
 import AccountPage from "./pages/AccountPage";
+import LoginPage from "./pages/LoginPage/LoginPage";
 
 function App() {
   return (
