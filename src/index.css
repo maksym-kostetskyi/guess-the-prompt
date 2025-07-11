@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #db7c7c;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -38,6 +38,7 @@ h1 {
 button {
   border-radius: 8px;
   border: 1px solid transparent;
+  box-sizing: border-box;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
@@ -47,7 +48,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #000000;
 }
 button:focus,
 button:focus-visible {

@@ -4,7 +4,7 @@ export default async function generateImage(
   roomId: string
 ) {
   const response = await fetch(
-    `http://51.21.195.135:8000/rooms/${roomId}/prompt`,
+    `https://guessthepromt.store/rooms/${roomId}/prompt`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
