@@ -3,7 +3,7 @@ import { Button, Flex, Heading, Text, VStack } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function AccountPage() {
+const AccountPage = () => {
   const storedPlayer = localStorage.getItem("player");
   const player = storedPlayer ? JSON.parse(storedPlayer) : { name: "Guest" };
   const navigate = useNavigate();
@@ -78,4 +78,6 @@ export default function AccountPage() {
       </Button>
     </Flex>
   );
-}
+};
+
+export default AccountPage;
