@@ -1,12 +1,23 @@
 import { getPlayerInfo } from "@/api/getPlayerInfo";
+import type Player from "@/types/Player";
 import { Button, Flex, Heading, Text, VStack } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AccountPage = () => {
   const storedPlayer = localStorage.getItem("player");
-  const player = storedPlayer ? JSON.parse(storedPlayer) : { name: "Guest" };
+  const playerName = storedPlayer ? JSON.parse(storedPlayer) : { name: "Guest" };
   const navigate = useNavigate();
+  const [playerInfo, setPlayerInfo] = useState<Player>({
+    id: 0,
+    username: playerName.name || "Guest",
+    total_games: 0,
+    total_score: 0,
+    avatar_url: "",
+    role: "player",
+    score: 0,
+    name: playerName.name || "Guest",
+  });
 
   const handleLogout = () => {
     localStorage.removeItem("player");
@@ -28,7 +39,7 @@ const AccountPage = () => {
     const fetchPlayerData = async () => {
       try {
         const playerData = await getPlayerInfo();
-        localStorage.setItem("player", JSON.stringify(playerData));
+        setPlayerInfo(playerData);
       } catch (error) {
         console.error("Failed to fetch player data:", error);
         // Optionally, you can redirect to login if fetching fails
@@ -50,12 +61,12 @@ const AccountPage = () => {
     >
       <Heading mb={6}>Account</Heading>
 
-      <Text mb={4}>Hello, {player.name}!</Text>
+      <Text mb={4}>Hello, {playerInfo.username}!</Text>
 
       <VStack mb={8}>
-        <Text mb={2}>Total Games: {player.total_games || 0}</Text>
-        <Text mb={2}>Total Score: {player.total_score || 0}</Text>
-        <Text mb={2}>Avatar URL: {player.avatar_url || "No avatar set"}</Text>
+        <Text mb={2}>Total Games: {playerInfo.total_games || 0}</Text>
+        <Text mb={2}>Total Score: {playerInfo.total_score || 0}</Text>
+        <Text mb={2}>Avatar URL: {playerInfo.avatar_url || "No avatar set"}</Text>
       </VStack>
 
       <Button
