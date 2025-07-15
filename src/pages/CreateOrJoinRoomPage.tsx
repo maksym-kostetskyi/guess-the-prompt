@@ -4,7 +4,7 @@ import { Box, Input, Button, VStack, Text, Spinner } from "@chakra-ui/react";
 import { Header } from "@/components/Header";
 import { createRoom } from "@/api/createRoom";
 
-export default function CreateOrJoinRoomPage() {
+const CreateOrJoinRoomPage = () => {
   const navigate = useNavigate();
   const [creating, setCreating] = useState(false);
   const [joinId, setJoinId] = useState("");
@@ -76,4 +76,6 @@ export default function CreateOrJoinRoomPage() {
       </Box>
     </>
   );
-}
+};
+
+export default CreateOrJoinRoomPage;

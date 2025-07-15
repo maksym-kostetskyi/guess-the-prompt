@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { registerAccount } from "@/api/registerAccount";
 import { loginAccount } from "@/api/loginAccount";
 
-export default function LoginPage() {
+const LoginPage = () => {
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [name, setName] = useState("");
   const [authTab, setAuthTab] = useState<"anon" | "login" | "register">("anon");
@@ -236,4 +236,6 @@ export default function LoginPage() {
       <RuleSlider />
     </Flex>
   );
-}
+};
+
+export default LoginPage;

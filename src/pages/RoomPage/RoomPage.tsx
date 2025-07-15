@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Flex, HStack, Spinner, Text, VStack, Button } from "@chakra-ui/react";
+import { Flex, HStack, Spinner, VStack, Button } from "@chakra-ui/react";
 import { PlayerList } from "./components/PlayerList";
 import { RoomImage } from "./components/RoomImage";
 import { SettingsPanel } from "./components/SettingsPanel";
@@ -9,13 +9,27 @@ import { GuessInput } from "./components/GuessInput";
 import { Header } from "@/components/Header";
 import useRoom from "../../hooks/useRoom";
 import { leaveRoom } from "@/api/leaveRoom";
-import nextTurn from "@/api/nextTurn";
+import startGame from "@/api/startGame";
+import type Settings from "@/types/Settings";
+import changeSettings from "@/api/changeSettings";
+import RoomInfo from "./components/RoomInfo";
 
 const RoomPage = () => {
   const navigate = useNavigate();
   const { roomId } = useParams<{ roomId: string }>();
   const stored = localStorage.getItem("player");
   const player = stored ? JSON.parse(stored) : { name: "" };
+  const [gameStarted, setGameStarted] = useState(false);
+  const { room, loading, socketRef } = useRoom(roomId!, player.name);
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const roomImageUrl = room?.image_url;
+  const isAdmin = room?.current_admin === player.name;
+  const isPrompter = room?.current_prompter === player.name;
+  const [settings, setSettings] = useState<Settings>({
+    round_count: 5,
+    prompt_words: 2,
+    turn_length: 60,
+  });
 
   // Якщо немає імені — редірект
   useEffect(() => {
@@ -24,41 +38,48 @@ const RoomPage = () => {
     }
   }, [player.name, navigate]);
 
-  const { room, loading } = useRoom(roomId!, player.name);
-  const [imageUrl, setImageUrl] = useState<string>("");
-
-  // Підтягуємо image_url із room у локальний state
-  const roomImageUrl = room?.image_url;
-
   useEffect(() => {
     if (roomImageUrl) {
       setImageUrl(roomImageUrl);
     }
   }, [roomImageUrl]);
 
+  useEffect(() => {
+    if (room) {
+      if (room.state !== "waiting") {
+        setGameStarted(true);
+      }
+    }
+  }, [room]);
+
   if (loading) {
     return <Spinner size="xl" mt={20} />;
   }
-
-  if (!room) {
-    return (
-      <Text mt={20} textAlign="center">
-        Room not found or error loading room
-      </Text>
-    );
-  }
-
-  const isAdmin = room.current_admin === player.name;
-  const isPrompter = room.current_prompter === player.name;
 
   const handleLeaveRoom = async () => {
     await leaveRoom(roomId!, player.name);
     navigate("/room");
   };
 
-  const handleNextTurn = async () => {
-    await nextTurn(roomId!);
-    setImageUrl(""); // Очищуємо URL, щоб оновити зображення
+  const handleStartGame = async () => {
+    try {
+      const roomSettings = await startGame(roomId!);
+      setSettings(roomSettings.settings);
+      setGameStarted(true);
+    } catch (error) {
+      console.error("Failed to start game:", error);
+      alert("Failed to start game. Please try again.");
+    }
+  };
+
+  const handleChangeSettings = async (newSettings: Settings) => {
+    try {
+      await changeSettings(roomId!, newSettings);
+      setSettings(newSettings);
+    } catch (error) {
+      console.error("Failed to change settings:", error);
+      alert("Failed to change settings. Please try again.");
+    }
   };
 
   return (
@@ -76,9 +97,32 @@ const RoomPage = () => {
         gap={4}
       >
         <HStack justify="space-between" h="80%" w="100%">
-          <PlayerList players={room.players} />
+          <PlayerList
+            players={room?.players ?? []}
+            isHost={isAdmin}
+            roomID={roomId!}
+          />
+
           <RoomImage imageUrl={imageUrl} />
-          {isAdmin && <SettingsPanel />}
+
+          {!gameStarted && (
+            <SettingsPanel
+              round_count={settings.round_count}
+              prompt_words={settings.prompt_words}
+              turn_length={settings.turn_length}
+              isHost={isAdmin}
+              onChange={handleChangeSettings}
+            />
+          )}
+
+          {gameStarted && (
+            <RoomInfo
+              totalRounds={settings.round_count}
+              promptWords={settings.prompt_words}
+              turnLength={settings.turn_length}
+              ws={socketRef}
+            />
+          )}
         </HStack>
 
         <VStack h="min-content" w="30%" justify="center">
@@ -92,14 +136,17 @@ const RoomPage = () => {
           >
             Leave Room
           </Button>
-          {!isPrompter ? (
+
+          {gameStarted && !isPrompter && (
             <GuessInput
               playerName={player.name}
               roomId={roomId!}
               onGuess={() => {}}
               buttonColorScheme="green"
             />
-          ) : (
+          )}
+
+          {gameStarted && isPrompter && (
             <PromptInput
               playerName={player.name}
               roomId={roomId!}
@@ -108,15 +155,15 @@ const RoomPage = () => {
             />
           )}
 
-          {isAdmin && (
+          {isAdmin && !gameStarted && (
             <Button
               w="full"
               color="white"
               bg="blue.500"
               _hover={{ bg: "blue.400" }}
-              onClick={handleNextTurn}
+              onClick={handleStartGame}
             >
-              Next Turn
+              Start Game
             </Button>
           )}
         </VStack>
