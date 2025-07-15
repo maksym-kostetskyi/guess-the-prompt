@@ -37,7 +37,9 @@ export default function useRoom(roomId: string, playerName: string) {
       try {
         let info = await getRoomInfoWithRetry(roomId, 5, 700);
 
-        const alreadyJoined = info.players.some((p) => p.username === playerName);
+        const alreadyJoined = info.players.some(
+          (p) => p.username === playerName
+        );
         if (!alreadyJoined) {
           try {
             await joinRoom(roomId, playerName);
@@ -70,7 +72,7 @@ export default function useRoom(roomId: string, playerName: string) {
   }, []);
 
   // 3) Підключаємо WebSocket
-  const { sendMessage } = useWebSocket(roomId, handleRoomUpdate);
+  const { sendMessage, socketRef } = useWebSocket(roomId, handleRoomUpdate);
 
-  return { room, loading, sendMessage };
+  return { room, loading, sendMessage, socketRef };
 }

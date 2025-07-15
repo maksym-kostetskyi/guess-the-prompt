@@ -67,5 +67,6 @@ export function useWebSocket(
         ws.send(JSON.stringify(data));
       }
     },
+    socketRef,
   };
 }
