@@ -13,12 +13,13 @@ import startGame from "@/api/startGame";
 import type Settings from "@/types/Settings";
 import changeSettings from "@/api/changeSettings";
 import RoomInfo from "./components/RoomInfo";
+import { restartGame } from "@/api/restartGame";
 
 const RoomPage = () => {
   const navigate = useNavigate();
   const { roomId } = useParams<{ roomId: string }>();
   const stored = localStorage.getItem("player");
-  const player = stored ? JSON.parse(stored) : { name: "" };
+  const player = stored ? JSON.parse(stored) : { name: "", token: null };
   const [gameStarted, setGameStarted] = useState(false);
   const { room, loading, socketRef } = useRoom(roomId!, player.name);
   const [imageUrl, setImageUrl] = useState<string>("");
@@ -66,9 +67,21 @@ const RoomPage = () => {
       const roomSettings = await startGame(roomId!);
       setSettings(roomSettings.settings);
       setGameStarted(true);
+      console.log(localStorage.getItem("player"));
     } catch (error) {
       console.error("Failed to start game:", error);
       alert("Failed to start game. Please try again.");
+    }
+  };
+
+  const handleRestartGame = async () => {
+    try {
+      await restartGame(roomId!);
+      setGameStarted(false);
+      setImageUrl("");
+    } catch (error) {
+      console.error("Failed to restart game:", error);
+      alert("Failed to restart game. Please try again.");
     }
   };
 
@@ -164,6 +177,18 @@ const RoomPage = () => {
               onClick={handleStartGame}
             >
               Start Game
+            </Button>
+          )}
+
+          {isAdmin && gameStarted && (
+            <Button
+              w="full"
+              color="white"
+              bg="blue.500"
+              _hover={{ bg: "blue.400" }}
+              onClick={handleRestartGame}
+            >
+              Restart Game
             </Button>
           )}
         </VStack>

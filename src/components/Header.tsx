@@ -18,22 +18,19 @@ export function Header() {
   useEffect(() => {
     // Зчитуємо дані один раз при маунті
     const storedPlayer = localStorage.getItem("player");
-    const storedToken = localStorage.getItem("token");
-
-    // name з гостя чи з облікового запису
     if (storedPlayer) {
       try {
-        const { name } = JSON.parse(storedPlayer);
+        const { name, token } = JSON.parse(storedPlayer);
         setName(name ?? null);
+        setIsAccount(!!token);
       } catch {
         setName(null);
+        setIsAccount(false);
       }
     } else {
       setName(null);
+      setIsAccount(false);
     }
-
-    // Розрізняємо обліковку за наявністю токена
-    setIsAccount(!!storedToken);
   }, []);
 
   const handleChangeName = () => {

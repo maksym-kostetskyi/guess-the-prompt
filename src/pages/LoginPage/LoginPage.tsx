@@ -27,9 +27,7 @@ const LoginPage = () => {
 
   const handleSaveName = () => {
     if (!name.trim()) return;
-
-    localStorage.setItem("player", JSON.stringify({ name }));
-    localStorage.setItem("token", "");
+    localStorage.setItem("player", JSON.stringify({ name, token: null }));
     console.log("Ім’я збережено:", name);
     navigate("/room");
   };
@@ -40,12 +38,12 @@ const LoginPage = () => {
     try {
       // loginAccount повертає { access_token, token_type }
       const { access_token } = await loginAccount(authUsername, authPassword);
-
-      // зберігаємо ім’я гравця
-      localStorage.setItem("player", JSON.stringify({ name: authUsername }));
-      // і токен
-      localStorage.setItem("token", access_token);
-
+      // зберігаємо ім’я гравця і токен разом
+      localStorage.setItem(
+        "player",
+        JSON.stringify({ name: authUsername, token: access_token })
+      );
+      console.log("Ім’я гравця збережено:", localStorage.getItem("player"));
       navigate("/room");
     } catch (err) {
       console.error(err);
@@ -61,7 +59,10 @@ const LoginPage = () => {
     try {
       const res = await registerAccount(authUsername, authPassword);
       if (!res.ok) throw new Error("Помилка реєстрації");
-      localStorage.setItem("player", JSON.stringify({ name: authUsername }));
+      localStorage.setItem(
+        "player",
+        JSON.stringify({ name: authUsername, token: null })
+      );
       navigate("/room");
     } catch {
       setAuthError("Помилка реєстрації або логін вже зайнятий");

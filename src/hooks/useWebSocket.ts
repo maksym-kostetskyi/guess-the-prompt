@@ -26,8 +26,9 @@ export function useWebSocket(
       return;
     }
 
-    // Зчитуємо токен
-    const token = localStorage.getItem("token");
+    // Зчитуємо токен з player
+    const storedPlayer = localStorage.getItem("player");
+    const token = storedPlayer ? JSON.parse(storedPlayer).token : null;
     const url = token
       ? `wss://guessthepromt.store/ws/rooms/${roomId}?token=${token}`
       : `wss://guessthepromt.store/ws/rooms/${roomId}`;
