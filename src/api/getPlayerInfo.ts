@@ -7,7 +7,6 @@ export async function getPlayerInfo(): Promise<Player> {
     : { name: "Guest", token: null };
   const name = playerObj.name;
 
-  console.log("Stored player name:", name);
 
   const res = await fetch(
     `https://guessthepromt.store/api/v1/accounts/stats/${name} `,
@@ -16,7 +15,6 @@ export async function getPlayerInfo(): Promise<Player> {
       headers: { "Content-Type": "application/json" },
     }
   );
-  console.log("GET PLAYER INFO status:", res.status);
   if (!res.ok) throw new Error(`Fetch room failed: ${res.status}`);
   return res.json();
 }

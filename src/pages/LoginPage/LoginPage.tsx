@@ -28,7 +28,6 @@ const LoginPage = () => {
   const handleSaveName = () => {
     if (!name.trim()) return;
     localStorage.setItem("player", JSON.stringify({ name, token: null }));
-    console.log("Ім’я збережено:", name);
     navigate("/room");
   };
 
@@ -43,7 +42,6 @@ const LoginPage = () => {
         "player",
         JSON.stringify({ name: authUsername, token: access_token })
       );
-      console.log("Ім’я гравця збережено:", localStorage.getItem("player"));
       navigate("/room");
     } catch (err) {
       console.error(err);

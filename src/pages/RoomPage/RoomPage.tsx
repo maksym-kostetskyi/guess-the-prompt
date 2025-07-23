@@ -103,7 +103,6 @@ const RoomPage = () => {
       const roomSettings = await startGame(roomId!);
       setSettings(roomSettings.settings);
       setGameStarted(true);
-      console.log(localStorage.getItem("player"));
     } catch (error) {
       console.error("Failed to start game:", error);
       alert("Failed to start game. Please try again.");
