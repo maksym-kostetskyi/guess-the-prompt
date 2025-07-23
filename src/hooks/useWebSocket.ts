@@ -25,7 +25,6 @@ export function useWebSocket(
       (existing.readyState === WebSocket.CONNECTING ||
         existing.readyState === WebSocket.OPEN)
     ) {
-      console.log("🟡 WS skip: already connecting/open");
       return;
     }
 
@@ -38,10 +37,8 @@ export function useWebSocket(
 
     const ws = new WebSocket(url);
 
-    ws.onopen = () => console.log("✅ WS connected");
-    ws.onerror = (err) => console.error("WS error:", err);
-    ws.onclose = (e) =>
-      console.log("❌ WS closed", e.code, e.reason, e.wasClean);
+    ws.onopen = () => {};
+    ws.onclose = () => {};
 
     ws.onmessage = (e) => {
       try {
@@ -49,14 +46,11 @@ export function useWebSocket(
         if (msg.event === "room_update" && msg.data) {
           onRoomUpdate(msg.data);
         } else if (msg.event === "game_finished") {
-          console.log("🎉 Game finished event received");
           onGameFinished?.();
         } else if (msg.event === "player_kicked" && msg.player) {
-          console.log("👢 Player kicked event received:", msg.player);
           onPlayerKicked?.(msg.player);
         } else {
-          // Інші івенти
-          console.log("🟡 WS other event:", msg.event, msg);
+          // Other events
         }
       } catch (err) {
         console.error("WS message parse error:", err);
