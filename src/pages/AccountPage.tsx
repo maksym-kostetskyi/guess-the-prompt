@@ -6,7 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 const AccountPage = () => {
   const storedPlayer = localStorage.getItem("player");
-  const playerName = storedPlayer ? JSON.parse(storedPlayer) : { name: "Guest" };
+  const playerObj = storedPlayer
+    ? JSON.parse(storedPlayer)
+    : { name: "Guest", token: null };
+  const playerName = playerObj.name || "Guest";
   const navigate = useNavigate();
   const [playerInfo, setPlayerInfo] = useState<Player>({
     id: 0,
@@ -21,7 +24,6 @@ const AccountPage = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("player");
-    localStorage.removeItem("token");
     navigate("/");
   };
 
@@ -66,7 +68,9 @@ const AccountPage = () => {
       <VStack mb={8}>
         <Text mb={2}>Total Games: {playerInfo.total_games || 0}</Text>
         <Text mb={2}>Total Score: {playerInfo.total_score || 0}</Text>
-        <Text mb={2}>Avatar URL: {playerInfo.avatar_url || "No avatar set"}</Text>
+        <Text mb={2}>
+          Avatar URL: {playerInfo.avatar_url || "No avatar set"}
+        </Text>
       </VStack>
 
       <Button

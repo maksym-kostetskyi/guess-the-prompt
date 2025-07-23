@@ -2,7 +2,10 @@ import type Player from "@/types/Player";
 
 export async function getPlayerInfo(): Promise<Player> {
   const storedPlayer = localStorage.getItem("player");
-  const name = storedPlayer ? JSON.parse(storedPlayer).name : "Guest";
+  const playerObj = storedPlayer
+    ? JSON.parse(storedPlayer)
+    : { name: "Guest", token: null };
+  const name = playerObj.name;
 
   console.log("Stored player name:", name);
 
