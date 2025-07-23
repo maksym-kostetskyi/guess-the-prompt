@@ -4,11 +4,14 @@ import type Room from "@/types/Room";
 interface WSIncoming {
   event: string;
   data?: Room;
+  player?: string;
 }
 
 export function useWebSocket(
   roomId: string,
-  onRoomUpdate: (room: Room) => void
+  onRoomUpdate: (room: Room) => void,
+  onGameFinished?: () => void,
+  onPlayerKicked?: (playerName: string) => void
 ) {
   const socketRef = useRef<WebSocket | null>(null);
 
@@ -45,8 +48,14 @@ export function useWebSocket(
         const msg = JSON.parse(e.data) as WSIncoming;
         if (msg.event === "room_update" && msg.data) {
           onRoomUpdate(msg.data);
+        } else if (msg.event === "game_finished") {
+          console.log("🎉 Game finished event received");
+          onGameFinished?.();
+        } else if (msg.event === "player_kicked" && msg.player) {
+          console.log("👢 Player kicked event received:", msg.player);
+          onPlayerKicked?.(msg.player);
         } else {
-          // Інші івенти, наприклад player_joined
+          // Інші івенти
           console.log("🟡 WS other event:", msg.event, msg);
         }
       } catch (err) {
@@ -59,7 +68,7 @@ export function useWebSocket(
       ws.close();
       socketRef.current = null;
     };
-  }, [roomId, onRoomUpdate]); // <-- без token у залежностях
+  }, [roomId, onRoomUpdate, onGameFinished, onPlayerKicked]);
 
   return {
     sendMessage: (data: unknown) => {

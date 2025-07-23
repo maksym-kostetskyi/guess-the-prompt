@@ -20,7 +20,12 @@ async function getRoomInfoWithRetry(
   throw new Error("Room not found");
 }
 
-export default function useRoom(roomId: string, playerName: string) {
+export default function useRoom(
+  roomId: string,
+  playerName: string,
+  onGameFinished?: () => void,
+  onPlayerKicked?: (playerName: string) => void
+) {
   const [room, setRoom] = useState<Room | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -72,7 +77,12 @@ export default function useRoom(roomId: string, playerName: string) {
   }, []);
 
   // 3) Підключаємо WebSocket
-  const { sendMessage, socketRef } = useWebSocket(roomId, handleRoomUpdate);
+  const { sendMessage, socketRef } = useWebSocket(
+    roomId,
+    handleRoomUpdate,
+    onGameFinished,
+    onPlayerKicked
+  );
 
   return { room, loading, sendMessage, socketRef };
 }
