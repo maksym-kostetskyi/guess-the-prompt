@@ -6,6 +6,16 @@ An interactive multiplayer web game where players create AI-generated images fro
 
 **Guess the Prompt** is a session-based multiplayer game that combines creativity and deduction. Players take turns creating prompts for AI image generation, while others attempt to guess the original prompts based on the generated images. The game features real-time multiplayer functionality with WebSocket connections, allowing for seamless collaborative gameplay.
 
+## 🌐 Live Demo
+
+[Play Now](https://guess-the-prompt-lf0nyrtda-mkost996-gmailcoms-projects.vercel.app//) - Hosted on Vercel
+
+## 👨‍💻 Development
+
+**Frontend Development**: [@maksym-kostetskyi](https://github.com/maksym-kostetskyi)
+
+**Backend Development**: [@Profy8712](https://github.com/Profy8712/guess-the-prompt-backend)
+
 ## ✨ Features
 
 ### 🏠 Room Management
@@ -65,12 +75,6 @@ An interactive multiplayer web game where players create AI-generated images fro
 - **REST API** - HTTP endpoints for game actions
 - **Authentication** - Token-based user sessions
 
-## 👨‍💻 Development
-
-**Frontend Development**: [@maksym-kostetskyi](https://github.com/maksym-kostetskyi)
-
-**Backend Development**: [@Profy8712](https://github.com/Profy8712/guess-the-prompt-backend)
-
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -118,9 +122,3 @@ An interactive multiplayer web game where players create AI-generated images fro
 4. **Take Turns**: Each player creates prompts while others guess
 5. **Score Points**: Earn points when someone guesses your prompt correctly
 6. **Win**: Player with the highest score wins!
-
-## 🌐 Live Demo
-
-[Play Now](https://guess-the-prompt-lf0nyrtda-mkost996-gmailcoms-projects.vercel.app//) - Hosted on Vercel
-
-
