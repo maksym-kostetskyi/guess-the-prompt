@@ -8,7 +8,7 @@ An interactive multiplayer web game where players create AI-generated images fro
 
 ## 🌐 Live Demo
 
-[Play Now](https://guess-the-prompt-lf0nyrtda-mkost996-gmailcoms-projects.vercel.app//) - Hosted on Vercel
+[Play Now](https://guess-the-prompt-git-main-mkost996-gmailcoms-projects.vercel.app/) - Hosted on Vercel 
 
 ## 👨‍💻 Development
 
